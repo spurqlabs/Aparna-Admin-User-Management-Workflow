@@ -1,0 +1,51 @@
+{
+  "loginPage": {
+    "usernameField": "input[name='username']",
+    "passwordField": "input[name='password']",
+    "loginButton": "button[type='submit']"
+  },
+
+  "dashboardPage": {
+    "dashboardHeader": "//h6[text()='Dashboard']",
+    "profileMenu": "//p[@class='oxd-userdropdown-name']"
+  },
+
+  "adminPage": {
+    "adminMenu": "//span[text()='Admin']",
+    "userMgmtHeader": "//h5[text()='System Users']",
+    "addButton": "//button[normalize-space()='Add']",
+
+    "searchUsername": "(//input[@class='oxd-input oxd-input--active'])[2]",
+    "searchUserRoleDropdown": "(//div[@class='oxd-select-text'])[1]",
+    "searchStatusDropdown": "(//div[@class='oxd-select-text'])[2]",
+    "searchButton": "//button[normalize-space()='Search']",
+
+    "resultTable": "//div[@class='oxd-table-body']",
+    "noRecordMsg": "//span[text()='No Records Found']",
+
+    "deleteButton": "//i[@class='oxd-icon bi-trash']",
+    "confirmDelete": "//button[normalize-space()='Yes, Delete']",
+
+    "tableBody": "//div[@class='oxd-table-body']",
+    "userRow": "//div[@role='row']//div[text()='{username}']"
+  },
+
+  "addUserPage": {
+    "addUserHeader": "//h6[text()='Add User']",
+
+    "userRoleDropdown": "//label[text()='User Role']/following::div[contains(@class,'oxd-select-text')][1]",
+    "userRoleAdmin": "(//div[@role='listbox']//span[text()='Admin'])[1]",
+
+    "employeeNameInput": "//input[@placeholder='Type for hints...']",
+    "employeeSuggestion": "//div[@role='listbox']//span",
+
+    "statusDropdown": "//label[text()='Status']/following::div[contains(@class,'oxd-select-text')][1]",
+    "statusEnabled": "//div[@role='listbox']//span[normalize-space()='Enabled']",
+
+    "newUsernameInput": "(//input[@class='oxd-input oxd-input--active'])[2]",
+    "newPasswordInput": "(//input[@type='password'])[1]",
+    "confirmPasswordInput": "(//input[@type='password'])[2]",
+
+    "saveButton": "//button[normalize-space()='Save']"
+  }
+}

@@ -3,39 +3,42 @@ package com.orangehrm.automation.steps;
 import com.microsoft.playwright.Page;
 import com.orangehrm.automation.base.PlaywrightFactory;
 import com.orangehrm.automation.pages.AdminPage;
+import com.orangehrm.automation.utils.DataReader;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LoginSteps {
+
+    private static final Logger log = LogManager.getLogger(LoginSteps.class);
 
     Page page = PlaywrightFactory.getPage();
     AdminPage admin = new AdminPage(page);
 
-    // 1. Open URL
+    private String username;
+
     @Given("user is on login page")
     public void openLogin() {
-        admin.openLogin("https://opensource-demo.orangehrmlive.com/");
+        // URL handled in hooks/config
     }
 
-    // 2. Enter credentials
     @When("user enters username {string} and password {string}")
     public void login(String u, String p) {
+        log.info("Entering credentials");
         admin.enterCredentials(u, p);
     }
 
-    // 3. Click login
     @And("clicks on login button")
     public void clickLogin() {
         admin.clickLoginButton();
     }
 
-    // 4. Verify dashboard
     @Then("dashboard page should be displayed")
     public void verifyDashboard() {
-        Assert.assertTrue(admin.isDashboardVisible());
+        Assert.assertTrue(admin.isDashboardVisible(), "Dashboard not visible");
     }
 
-    // 5. Admin Page
     @When("user clicks on admin menu")
     public void openAdmin() {
         admin.openAdminPage();
@@ -43,10 +46,9 @@ public class LoginSteps {
 
     @Then("user management page should be displayed")
     public void verifyUserMgmt() {
-        Assert.assertTrue(true);
+        Assert.assertTrue(admin.isUserMgmtVisible(), "User Management page not visible");
     }
 
-    // 6. Add User
     @When("user clicks on add button")
     public void clickAdd() {
         admin.clickAddUser();
@@ -54,32 +56,35 @@ public class LoginSteps {
 
     @Then("add user page should be displayed")
     public void verifyAddUserPage() {
-        Assert.assertTrue(true);
+        Assert.assertTrue(admin.isAddUserPageVisible(), "Add User page not visible");
     }
 
-    // 7. Create User
     @When("user enters new user details and saves")
     public void addUser() {
-        admin.createUser("Linda Anderson", "EMPAP", "Emp@123");
+        username = "EMP" + System.currentTimeMillis();
+
+        admin.createUser(
+                DataReader.get("newUser", "employeeName"),
+                username,
+                DataReader.get("newUser", "password")
+        );
     }
 
     @Then("user should be added successfully")
     public void verifyUserAdded() {
-        Assert.assertTrue(true);
+        Assert.assertTrue(admin.isUserPresent(username), "User not created");
     }
 
-    // 8. Search Created User
     @When("user searches created user")
     public void searchUser() {
-        admin.searchUser("EMPAP");
+        admin.searchUser(username);
     }
 
     @Then("created user record should be displayed")
     public void verifyUserRecord() {
-        Assert.assertTrue(admin.isUserPresent("EMPAP"));
+        Assert.assertTrue(admin.isUserPresent(username), "Created user not found");
     }
 
-    // 9. Delete User
     @When("user deletes created user")
     public void deleteUser() {
         admin.deleteUser();
@@ -87,28 +92,17 @@ public class LoginSteps {
 
     @Then("delete success message should be displayed")
     public void verifyDelete() {
-        Assert.assertTrue(true);
+        Assert.assertTrue(admin.isNoRecordFound() || !admin.isUserPresent(username),
+                "User deletion failed");
     }
 
-    // 10. Invalid Search
     @When("user searches invalid username")
     public void invalidSearch() {
-        admin.searchUser("abcd");
+        admin.searchUser(DataReader.get("invalidSearch", "username"));
     }
 
     @Then("no record found message should be displayed")
     public void verifyNoRecord() {
-        Assert.assertTrue(admin.isNoRecordFound());
-    }
-
-    // 11. Logout
-    @When("user logs out")
-    public void logout() {
-        admin.logout();
-    }
-
-    @Then("login page should be displayed")
-    public void verifyLogout() {
-        Assert.assertTrue(admin.isLoginPageVisible());
+        Assert.assertTrue(admin.isNoRecordFound(), "No record message not displayed");
     }
 }

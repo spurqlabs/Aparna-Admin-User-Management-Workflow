@@ -1,0 +1,15 @@
+{
+  "validUser": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+
+  "newUser": {
+    "employeeName": "a",
+    "password": "Emp@123"
+  },
+
+  "invalidSearch": {
+    "username": "abcd"
+  }
+}
